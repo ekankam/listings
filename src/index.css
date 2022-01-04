@@ -3,6 +3,10 @@
     box-sizing: border-box;
 }
 
+html {
+    min-height: 100vh;
+}
+
 html::-webkit-scrollbar {
     display: none;
 }
@@ -12,6 +16,7 @@ body {
     background-color: #f2f4f8;
     margin: 0;
     box-sizing: border-box;
+    min-height: 100vh;
 }
 
 a {
@@ -220,7 +225,7 @@ button {
 
 .signInBar,
 .signUpBar {
-    margin-top: 3rem;
+    margin-top: 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
