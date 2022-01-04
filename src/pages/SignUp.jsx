@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRightIcon } from '../assets'
 import {
     getAuth,
     createUserWithEmailAndPassword,
     updateProfile,
 } from 'firebase/auth'
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
+import { toast } from 'react-toastify'
 
+import { ArrowRightIcon } from '../assets'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import { db } from '../firebase.config'
 
@@ -64,7 +65,7 @@ const SignUp = () => {
 
             navigate('/')
         } catch (error) {
-            console.log(error)
+            toast.error('Something went wrong with registration!')
         }
     }
 
