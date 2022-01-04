@@ -4,6 +4,8 @@ import { ArrowRightIcon } from '../assets'
 
 import visiblityIcon from '../assets/svg/visibilityIcon.svg'
 
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+
 const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({ email: '', password: '' })
@@ -19,6 +21,29 @@ const SignIn = () => {
         }))
     }
 
+    const onSubmitHandler = async (e) => {
+        e.preventDefault()
+
+        try {
+            // initialize auth
+            const auth = getAuth()
+
+            // sign in user
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            )
+
+            // if user exists, then navigate to explore page
+            if (userCredential.user) {
+                navigate('/')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <>
             <div className="pageContainer">
@@ -27,7 +52,7 @@ const SignIn = () => {
                 </header>
 
                 <main>
-                    <form>
+                    <form onSubmit={onSubmitHandler}>
                         <input
                             type="email"
                             id="email"

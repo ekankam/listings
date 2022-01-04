@@ -6,6 +6,7 @@ import {
     createUserWithEmailAndPassword,
     updateProfile,
 } from 'firebase/auth'
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
 
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import { db } from '../firebase.config'
@@ -37,7 +38,7 @@ const SignUp = () => {
             const auth = getAuth()
 
             // register user
-            const userCredential = createUserWithEmailAndPassword(
+            const userCredential = await createUserWithEmailAndPassword(
                 auth,
                 email,
                 password
@@ -48,6 +49,18 @@ const SignUp = () => {
 
             // update display name
             updateProfile(auth.currentUser, { displayName: name })
+
+            // copy formData state
+            const formDataCopy = { ...formData }
+
+            // delete password because we do not want to store user password in the database
+            delete formDataCopy.password
+
+            //set timestamp to serverTimestamp
+            formDataCopy.timestamp = serverTimestamp()
+
+            // add user to users collection
+            await setDoc(doc(db, 'users', user.uid), formDataCopy)
 
             navigate('/')
         } catch (error) {
@@ -61,64 +74,68 @@ const SignUp = () => {
                 <header>
                     <p className="pageHeader">Welcome Back!</p>
                 </header>
-
-                <form onSubmit={onSubmitHandler}>
-                    <input
-                        type="text"
-                        className="nameInput"
-                        placeholder="Name"
-                        id="name"
-                        value={name}
-                        onChange={onChangeHandler}
-                    />
-                    <input
-                        type="email"
-                        className="emailInput"
-                        placeholder="Email"
-                        id="email"
-                        value={email}
-                        onChange={onChangeHandler}
-                    />
-
-                    <div className="passwordInputDiv">
+                <main>
+                    <form onSubmit={onSubmitHandler}>
                         <input
-                            type={showPassword ? 'text' : 'password'}
-                            className="passwordInput"
-                            placeholder="Password"
-                            id="password"
-                            value={password}
+                            type="text"
+                            className="nameInput"
+                            placeholder="Name"
+                            id="name"
+                            value={name}
+                            onChange={onChangeHandler}
+                        />
+                        <input
+                            type="email"
+                            className="emailInput"
+                            placeholder="Email"
+                            id="email"
+                            value={email}
                             onChange={onChangeHandler}
                         />
 
-                        <img
-                            src={visibilityIcon}
-                            alt="show password"
-                            className="showPassword"
-                            onClick={() =>
-                                setShowPassword((prevState) => !prevState)
-                            }
-                        />
-                    </div>
-
-                    <Link to="/forgot-password" className="forgotPasswordLink">
-                        Forgot Password
-                    </Link>
-
-                    <div className="signUpBar">
-                        <p className="signUpText">Sign Up</p>
-                        <button className="signUpButton">
-                            <ArrowRightIcon
-                                fill="#ffffff"
-                                width="34px"
-                                height="34px"
+                        <div className="passwordInputDiv">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                className="passwordInput"
+                                placeholder="Password"
+                                id="password"
+                                value={password}
+                                onChange={onChangeHandler}
                             />
-                        </button>
-                    </div>
-                </form>
 
-                <Link to="/sign-in" className="registerLink">
-                    Sign In Instead
-                </Link>
+                            <img
+                                src={visibilityIcon}
+                                alt="show password"
+                                className="showPassword"
+                                onClick={() =>
+                                    setShowPassword((prevState) => !prevState)
+                                }
+                            />
+                        </div>
+
+                        <Link
+                            to="/forgot-password"
+                            className="forgotPasswordLink"
+                        >
+                            Forgot Password
+                        </Link>
+
+                        <div className="signUpBar">
+                            <p className="signUpText">Sign Up</p>
+                            <button className="signUpButton">
+                                <ArrowRightIcon
+                                    fill="#ffffff"
+                                    width="34px"
+                                    height="34px"
+                                />
+                            </button>
+                        </div>
+                    </form>
+
+                    <Link to="/sign-in" className="registerLink">
+                        Sign In Instead
+                    </Link>
+                </main>
             </div>
         </>
     )
