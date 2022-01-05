@@ -12,6 +12,7 @@ import {
     SignUp,
     ForgetPassword,
     Category,
+    CreateListing,
 } from './pages'
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
                         path="/forget-password"
                         element={<ForgetPassword />}
                     />
+                    <Route path="/create-listing" element={<CreateListing />} />
                 </Routes>
                 <Navbar />
             </Router>
