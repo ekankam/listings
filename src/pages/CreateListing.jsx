@@ -6,6 +6,7 @@ import {
     uploadBytesResumable,
     getDownloadURL,
 } from 'firebase/storage'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -103,9 +104,10 @@ const CreateListing = () => {
         e.preventDefault()
 
         setLoading(true)
+
         if (discountedPrice >= regularPrice) {
             setLoading(false)
-            toast.error('Discounted price needs to be less than regular price.')
+            toast.error('Discounted price needs to be less than regular price')
             return
         }
 
@@ -120,31 +122,30 @@ const CreateListing = () => {
 
         if (geolocationEnabled) {
             const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.GEOCODE_API_KEY}`
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
             )
 
             const data = await response.json()
+
             geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
             geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
 
-            // check for invalid address inputs
             location =
                 data.status === 'ZERO_RESULTS'
                     ? undefined
                     : data.results[0]?.formatted_address
 
-            // notify user if address is invalid
             if (location === undefined || location.includes('undefined')) {
                 setLoading(false)
                 toast.error('Please enter a correct address')
+                return
             }
         } else {
             geolocation.lat = latitude
             geolocation.lng = longitude
-            location = address
         }
 
-        // store images in firebase
+        // Store image in firebase
         const storeImage = async (image) => {
             return new Promise((resolve, reject) => {
                 const storage = getStorage()
@@ -171,7 +172,7 @@ const CreateListing = () => {
                                 console.log('Upload is running')
                                 break
                             default:
-                                console.log('')
+                                break
                         }
                     },
                     (error) => {
@@ -198,9 +199,22 @@ const CreateListing = () => {
             return
         })
 
-        console.log(imgUrls)
+        const formDataCopy = {
+            ...formData,
+            imgUrls,
+            geolocation,
+            timestamp: serverTimestamp(),
+        }
 
+        formDataCopy.location = address
+        delete formDataCopy.images
+        delete formDataCopy.address
+        !formDataCopy.offer && delete formDataCopy.discountedPrice
+
+        const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
         setLoading(false)
+        toast.success('Listing saved')
+        navigate(`/category/${formDataCopy.type}/${docRef.id}`)
     }
 
     if (loading) {

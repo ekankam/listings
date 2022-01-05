@@ -67,11 +67,11 @@ const Category = () => {
             </header>
             {loading ? (
                 <Spinner />
-            ) : listings && listings.length > 0 ? (
+            ) : listings && listings?.length > 0 ? (
                 <>
                     <main>
                         <ul className="categoryListings">
-                            {listings.map((listing) => (
+                            {listings?.map((listing) => (
                                 <ListingItem
                                     listing={listing.data}
                                     id={listing.id}
