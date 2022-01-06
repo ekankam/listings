@@ -52,7 +52,7 @@ const ListingItem = ({ listing, id, onDeleteHandler }) => {
             {onDeleteHandler && (
                 <DeleteIcon
                     className="removeIcon"
-                    fil="rgb(231, 76, 60)"
+                    fill="rgb(231, 76, 60)"
                     onClick={() => onDeleteHandler(listing.id, listing.name)}
                 />
             )}
