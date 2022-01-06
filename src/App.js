@@ -13,6 +13,7 @@ import {
     ForgetPassword,
     Category,
     CreateListing,
+    EditListing,
 } from './pages'
 import Contact from './pages/Contact'
 import Listing from './pages/Listing'
@@ -38,6 +39,10 @@ const App = () => {
                         element={<ForgetPassword />}
                     />
                     <Route path="/create-listing" element={<CreateListing />} />
+                    <Route
+                        path="/edit-listing/:listingId"
+                        element={<EditListing />}
+                    />
                     <Route
                         path="/category/:categoryName/:listingId"
                         element={<Listing />}

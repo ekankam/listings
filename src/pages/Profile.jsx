@@ -87,6 +87,8 @@ const Profile = () => {
         navigate('/')
     }
 
+    const onEditHandler = (listingId) => navigate(`/edit-listing/${listingId}`)
+
     const onDeleteHandler = async (listingId) => {
         if (window.confirm('Are you sure you want to delete?')) {
             await deleteDoc(doc(db, 'listings', listingId))
@@ -169,6 +171,9 @@ const Profile = () => {
                                     id={listing.id}
                                     onDeleteHandler={() =>
                                         onDeleteHandler(listing.id)
+                                    }
+                                    onEditHandler={() =>
+                                        onEditHandler(listing.id)
                                     }
                                 />
                             ))}

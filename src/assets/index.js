@@ -4,3 +4,4 @@ export { ReactComponent as PersonOutlineIcon } from './svg/personOutlineIcon.svg
 export { ReactComponent as ArrowRightIcon } from './svg/keyboardArrowRightIcon.svg'
 export { ReactComponent as GoogleIcon } from './svg/googleIcon.svg'
 export { ReactComponent as DeleteIcon } from './svg/deleteIcon.svg'
+export { ReactComponent as EditIcon } from './svg/editIcon.svg'
