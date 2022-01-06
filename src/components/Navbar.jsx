@@ -1,4 +1,4 @@
-import { useNavigate, useLoaction, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { ExploreIcon, OfferIcon, PersonOutlineIcon } from '../assets'
 

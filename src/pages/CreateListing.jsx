@@ -15,6 +15,7 @@ import { toast } from 'react-toastify'
 import { db } from '../firebase.config'
 
 const CreateListing = () => {
+     // eslint-disable-next-line 
     const [geolocationEnabled, setGeolocationEnabled] = useState(true)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
