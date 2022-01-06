@@ -14,6 +14,8 @@ import {
     Category,
     CreateListing,
 } from './pages'
+import Contact from './pages/Contact'
+import Listing from './pages/Listing'
 
 const App = () => {
     return (
@@ -36,6 +38,11 @@ const App = () => {
                         element={<ForgetPassword />}
                     />
                     <Route path="/create-listing" element={<CreateListing />} />
+                    <Route
+                        path="/category/:categoryName/:listingId"
+                        element={<Listing />}
+                    />
+                    <Route path="/contact/:landlordId" element={<Contact />} />
                 </Routes>
                 <Navbar />
             </Router>
