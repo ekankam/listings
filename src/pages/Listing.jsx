@@ -3,10 +3,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getDoc, doc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { db } from '../firebase.config'
 import Spinner from '../components/Spinner'
 import shareIcon from '../assets/svg/shareIcon.svg'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
 
 const Listing = () => {
     const [listing, setListing] = useState(null)
@@ -23,7 +29,6 @@ const Listing = () => {
             const docSnap = await getDoc(docRef)
 
             if (docSnap.exists()) {
-                console.log(docSnap)
                 setListing(docSnap.data())
                 setLoading(false)
             }
@@ -35,7 +40,24 @@ const Listing = () => {
     if (loading) return <Spinner />
     return (
         <main>
-            {/* Slider */}
+            <Swiper
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                slidesPerView={1}
+                pagination={{ clickable: true }}
+            >
+                {listing.imgUrls.map((url, index) => (
+                    <SwiperSlide key={index}>
+                        <div
+                            style={{
+                                background: `url(${listing.imgUrls[index]}) center no-repeat`,
+                                backgroundSize: 'cover',
+                                height: '400px',
+                            }}
+                            className="swiperSlideDiv"
+                        ></div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
 
             <div
                 className="shareIconDiv"
